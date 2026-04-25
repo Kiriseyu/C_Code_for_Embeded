@@ -1,0 +1,22 @@
+#include<stdio.h>
+
+int main(void) {
+    int a, b, c;
+    scanf("%d %d %d", &a, &b, &c);
+    if (a + b > c && a + c > b && b + c > a) {
+        if (a * a + b * b == c * c || a * a + c * c == b * b || c * c + b * b == a * a) {
+            printf("构成直角三角形\n");
+        }
+        if (a == b || a == c || b == c) {
+            printf("构成等腰三角形\n");
+            if (a == b && a == c || a == b && b == c) {
+                printf("构成等边三角形\n");
+                return 0;
+            }
+        }
+        printf("构成普通三角形\n");
+    } else {
+        printf("不构成三角形\n");
+    }
+    return 0;
+}
