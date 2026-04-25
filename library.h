@@ -1,0 +1,6 @@
+#ifndef C_CODE_FOR_EMBEDED_LIBRARY_H
+#define C_CODE_FOR_EMBEDED_LIBRARY_H
+
+void hello(void);
+
+#endif //C_CODE_FOR_EMBEDED_LIBRARY_H
