@@ -1,203 +1,72 @@
-# GitHub 极简全量手册（新手版）
+# C_Code_for_Embeded
 
-> 覆盖：创建 → 推送 → 拉取 → 覆盖 → 排错
-## 一、首次配置（只做一次）
-```bash
-# 配置用户名和邮箱（会显示在提交记录里）
-git config --global user.name "你的名字"
-git config --global user.email "你的邮箱@example.com"
+C 语言学习笔记仓库, 面向嵌入式开发方向。每个 `.c` 文件都是一个独立的小程序,
+按主题分类组织, 便于查阅与复习。
 
-# 查看配置
-git config --list
+## 目录结构
+
 ```
-## 二、创建仓库
-
-### 场景 A：从零新建
-
-```bash
-# 1. 创建项目文件夹
-mkdir my-project && cd my-project
-
-# 2. 初始化 Git
-git init
-
-# 3. 添加远程仓库（先在 GitHub 网页创建空仓库）
-git remote add origin https://github.com/用户名/仓库名.git
-```
-
-### 场景 B：克隆已有仓库
-
-```bash
-git clone https://github.com/用户名/仓库名.git
-cd 仓库名
-```
-## 三、日常 Workflow（最常用）
-
-```bash
-# 1. 查看当前状态（随时用）
-git status
-
-# 2. 添加文件到暂存区
-git add 文件名          # 添加单个
-git add .               # 添加所有改动
-
-# 3. 提交到本地（拍照存档）
-git commit -m "描述这次改了什么"
-
-# 4. 推送到 GitHub
-git push origin main
+src/
+├── basics/          基础语法与输入输出 (hello, printf, sizeof, 逻辑运算, 短路求值)
+├── control_flow/    控制流 (if/else, switch, continue, 成绩判定)
+├── math/            数学与数论 (闰年, 回文, 素数, 因子, 三角形判断, 累加, 换零钱)
+├── numbers/         数字处理 (拆位, 反转数字, 进制转换, my_atoi, 一年第几天)
+├── patterns/        图案打印 (边框, 三角形, 菱形, 九九乘法表, 表格)
+├── arrays/          数组操作 (求平均, 正数统计)
+├── sorting/         排序算法 (冒泡 / 选择 / 插入, 冒泡优化版)
+├── strings/         字符串处理 (自实现 strcpy / strcat / strcmp / strlen)
+├── pointers/        指针应用 (指针交换, 异或交换, 泛型交换, 宏交换)
+├── struct_union/    结构体与联合 (位域, 柔性数组, 内存对齐, 大小端判断)
+├── preprocessor/    预处理 (条件编译, #pragma / #error / #line 指令)
+├── memory/          内存管理 (malloc 演示)
+├── linkedlist/      链表 (有头 / 无头单向链表, 循环链表, 倒数第 k 节点)
+├── stack/           栈 (顺序栈实现 + 使用示例)
+├── algorithms/      算法 (Brian Kernighan 位计数, 阶乘, 斐波那契, 杨辉三角, 装箱问题)
+├── games/           小游戏 (五子棋, 猜数字, 数学 Bingo)
+├── linux/           Linux 专属 (用到 unistd.h / system("clear") 的程序)
+└── embedded/        嵌入式相关 (GPIO 位操作示例)
 ```
 
-**记忆口诀**：`add` → `commit` → `push`
+### 关于 archive 子目录
 
----
+部分分类下有 `archive/` 子目录, 存放同一主题的早期或重复实现版本
+(例如 `math/archive/` 里有多个闰年 / 水仙花数版本)。
+主目录保留最具代表性的版本, `archive/` 留作对比参考。
 
-## 四、拉取与同步
+### 关于函数库文件
+
+部分 `.c` 文件不含 `main` 函数 (如 `factorial.c`、`fibonacci.c`、`my_strlen.c` 等),
+它们是供其他文件 `#include` 使用的函数库, 不会被单独编译为可执行文件。
+
+## 构建方式
+
+本仓库用 CMake 管理。`CMakeLists.txt` 会递归扫描 `src/` 下所有 `.c` 文件,
+为每个含 `main` 函数的文件单独生成一个可执行目标 (以文件名命名)。
+
+### Windows (CLion)
+
+1. 用 CLion 打开本项目根目录
+2. 在顶部"配置下拉框"中选择要运行的目标 (如 `leap_year`)
+3. 点击运行按钮即可编译并执行
+
+### Linux (Ubuntu)
 
 ```bash
-# 拉取远程更新（开始工作前先做）
-git pull origin main
+# 1. 配置 (在项目根目录执行)
+cmake -B build -S .
 
-# 完整版：拉取 + 合并
-git pull origin main --rebase
+# 2. 编译单个目标 (把 leap_year 换成想运行的目标名)
+cmake --build build --target leap_year
+
+# 3. 运行
+./build/leap_year
 ```
 
-## 五、覆盖与强制操作（⚠️ 慎用）
+> 栈模块 `stack_app` 由 `stack_demo.c` + `stack.c` 合并编译, 是唯一的多文件目标。
 
-| 场景 | 命令 |
-|------|------|
-| 本地回退到上次提交 | `git reset --hard HEAD` |
-| 回退到指定版本 | `git reset --hard 提交ID` |
-| 强制推送（覆盖远程） | `git push -f origin main` |
-| 丢弃某个文件的修改 | `git checkout -- 文件名` |
+## 说明
 
-> **注意**：`--hard` 和 `-f` 会丢失数据，确认无误再用。
-
-## 六、分支操作（多人协作/功能开发）
-
-```bash
-# 查看分支
-git branch          # 本地
-git branch -r       # 远程
-
-# 创建并切换新分支
-git checkout -b feature-x
-
-# 切换分支
-git checkout main
-
-# 合并分支（先切换到主分支）
-git checkout main
-git merge feature-x
-
-# 删除分支
-git branch -d feature-x       # 已合并
-git branch -D feature-x       # 强制删除
-```
-## 七、常见问题排查
-
-### 问题 1：推送被拒（non-fast-forward）
-
-```
-error: failed to push some refs
-hint: Updates were rejected because the tip of your current branch is behind
-```
-
-**解决**：
-
-```bash
-# 先拉取再推送
-git pull origin main --rebase
-git push origin main
-
-# 如果确定远程没重要内容，强制覆盖
-git push -f origin main
-```
-
----
-
-### 问题 2：冲突（CONFLICT）
-
-```
-Auto-merging 文件名
-CONFLICT (content): Merge conflict in 文件名
-```
-
-**解决**：
-
-```bash
-# 1. 打开冲突文件，找到 <<<<<<< 标记
-# 2. 手动编辑保留想要的代码
-# 3. 删除所有冲突标记 <<<<<<< ======= >>>>>>>
-# 4. 重新提交
-git add .
-git commit -m "解决冲突"
-git push origin main
-```
-
-### 问题 3：remote origin already exists
-
-**解决**：
-
-```bash
-# 查看现有远程
-git remote -v
-
-# 修改 URL
-git remote set-url origin https://github.com/用户名/新仓库.git
-
-# 或删除重建
-git remote remove origin
-git remote add origin https://github.com/用户名/仓库.git
-```
-### 问题 4：忘记添加 .gitignore，已提交了大文件
-
-**解决**：
-
-```bash
-# 1. 添加 .gitignore 规则
-echo "__pycache__/" >> .gitignore
-
-# 2. 从 Git 中移除但保留本地文件
-git rm -r --cached __pycache__
-
-# 3. 重新提交
-git add .
-git commit -m "移除缓存文件"
-git push origin main
-```
-### 问题 5：提交信息写错了
-
-```bash
-# 修改最后一次提交信息
-git commit --amend -m "新信息"
-
-# 强制推送（如果已推送到远程）
-git push -f origin main
-```
-## 八、PyCharm 快捷操作
-
-| 操作 | 快捷键 |
-|------|--------|
-| 提交 | `Ctrl + K` |
-| 推送 | `Ctrl + Shift + K` |
-| 拉取 | `Ctrl + T` |
-| 查看历史 | `Alt + 9` |
-| 分支切换 | 右下角分支名称点击 |
-## 九、救急命令表
-
-| 我想... | 命令 |
-|---------|------|
-| 查看提交历史 | `git log --oneline` |
-| 查看某次改动 | `git show 提交ID` |
-| 暂存当前工作（临时保存）| `git stash` |
-| 恢复暂存 | `git stash pop` |
-| 查看远程地址 | `git remote -v` |
-| 查看谁改了哪行 | `git blame 文件名` |
-| 彻底删除未跟踪文件 | `git clean -fd` |
-## 十、黄金法则
-1. **提交前先看 `git status`**
-2. **推送前先 `git pull`**
-3. **`.gitignore` 第一时间加**
-4. **敏感信息（密码/Key）绝不提交**
-5. **强制操作 `-f` 前三思**
+- `src/linux/` 下的程序使用了 `unistd.h`、`sleep`、`system("clear")` 等,
+  仅在 Linux 下可正常运行, 在 Windows 上需改用对应 API。
+- `src/embedded/gpio_set.c` 为 GPIO 位操作示例, `GPIO.h` 需按实际平台补充。
+- 部分早期练习代码可能存在小 bug, 仅供学习参考。

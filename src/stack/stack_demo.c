@@ -2,11 +2,13 @@
 // Created by 26790 on 2026/8/14.
 //
 #include"stack.h"
+#include <stdio.h>  // printf 声明所在头文件
 
 int main(void) {
     int data[] = {11, 22, 33, 44, 55, 66, 77, 88, 99}; //数据源
     int i = 0; //循环变量
     int ret = 0; //接收函数返回值
+    int save = 0; //保存出栈的数据
     for (i = 0; i < sizeof(data) / sizeof(data[0]); i++) {
         stack_push(data[i]); //入栈
         if (ret != 0) {
