@@ -18,7 +18,7 @@ file(GLOB SRC_LIST CONFIGURE_DEPENDS "src/*.c")
 #             例如 gobang0.1.c -> 目标 gobang0_1
 #             (点号在部分生成器如 MinGW Makefiles 中非法,故替换)
 # 运行方式: 在 CLion 顶部"配置下拉框"中选择对应目标(如 gobang0_1)后点击运行
-foreach(src ${SRC_LIST})
+foreach (src ${SRC_LIST})
     # 取完整文件名(如 gobang0.1.c),注意:不能用 NAME_WE,
     # 因为 NAME_WE 会去掉"最长扩展名",把 gobang0.1.c 变成 gobang0(去掉了 .1.c)
     get_filename_component(fname ${src} NAME)
@@ -48,5 +48,18 @@ foreach(src ${SRC_LIST})
             src/test/ConditionalCompilation.c
             src/test/Preprocessing.c
             src/test/macro_swap.c
-            src/test/Llist_CreateUnloop.c)
-endforeach()
+            src/test/Llist_CreateUnloop.c
+            src/test/test_llist.c
+            src/test/listnode.c
+            src/test/listnode_head.c
+            src/test/List_CreateLoop.c
+            src/LinkedList/linkedlistNoheadUnloop.c
+            src/LinkedList/linkedlist.h
+            src/LinkedList/linkedlistHeadUnloop.c
+            src/test/revKpoint.c
+            src/test/01malloc.c
+            src/test/struct_malloc.c
+            src/stack/main.c
+            src/stack/stack.h
+            src/stack/stack.c)
+endforeach ()

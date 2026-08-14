@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 typedef struct Llist {
-    int data;
-    struct List *next;
+    int data; //数据域
+    struct Llist *next; //指针域
 } Llist;
 
 int main(void) {
@@ -22,10 +22,25 @@ int main(void) {
 
         //接入链表
         if (L == NULL) {
-            L = tail = s;
+            L = s;
+            tail = s;
         } else {
             tail->next = s;
             tail = s;
         }
     }
+
+    Llist *p = L;
+    while (p != NULL) {
+        //遍历并打印链表
+        printf("%d\n", p->data);
+        p = p->next;
+    }
+    while (L != NULL) {
+        //销毁链表释放内存
+        Llist *temp = L;
+        L = L->next;
+        free(temp);
+    }
+    return 0;
 }
