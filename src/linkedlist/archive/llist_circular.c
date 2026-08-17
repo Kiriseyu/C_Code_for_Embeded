@@ -3,7 +3,6 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h>
 
 #define HEADINSERT 1
 #define TAILINSERT 2
@@ -31,11 +30,12 @@ int llist_node(LLIST *handler, const void *data, int mode) {
     }
     newnode->next = p->next; //插入链表
     p->next = newnode;
+    return 0;
 }
 
 
 void llist_display(LLIST *handler) {
-    LList *cur = NULL;
+    LLIST *cur = NULL;
     for (cur = handler->next; cur != handler; cur = cur->next) {
         printf("%d ", cur->data);
     }

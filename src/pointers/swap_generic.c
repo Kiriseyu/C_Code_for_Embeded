@@ -7,7 +7,7 @@ void swap(void *data1, void *data2, size_t size) {
     if (temp == NULL) {
         return;
     }
-    memcpy(temp, data1, data2); //将data1指向的内存copy到temp
+    memcpy(temp, data1, size); //将data1指向的内存copy到temp
     memcpy(data1, data2, size); //将data2指向的内存copy到data1
     memcpy(data2, temp, size); //将temp指向的内存copy到data2
     free(temp);

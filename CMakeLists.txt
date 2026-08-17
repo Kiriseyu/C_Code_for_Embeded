@@ -27,19 +27,19 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # 递归收集 src/ 下全部 .c 源文件 (CONFIGURE_DEPENDS: 新增文件自动纳入)
 file(GLOB_RECURSE ALL_C_FILES CONFIGURE_DEPENDS "src/*.c")
 
-foreach(src ${ALL_C_FILES})
+foreach (src ${ALL_C_FILES})
     # 栈模块的 stack_demo.c 依赖 stack.c, 跳过自动构建, 改用下方专用目标
-    if(src MATCHES "stack_demo\\.c")
+    if (src MATCHES "stack_demo\\.c")
         continue()
-    endif()
+    endif ()
 
     # 检测该文件是否定义了 main 函数 (匹配 int main( 或 void main()
     # CMake 正则中 \\( 表示字面左括号, [ ]+ 表示至少一个空格)
     file(STRINGS ${src} HAS_MAIN REGEX "(int|void)[ ]+main[ ]*\\(")
-    if(NOT HAS_MAIN)
+    if (NOT HAS_MAIN)
         # 无 main => 函数库文件, 不单独构建
         continue()
-    endif()
+    endif ()
 
     # 目标名 = 文件名去掉 .c 后缀; 点号替换为下划线
     # (点号在 MinGW Makefiles 等生成器中非法)
@@ -47,15 +47,19 @@ foreach(src ${ALL_C_FILES})
     string(REGEX REPLACE "\\.c$" "" target_name ${fname})
     string(REPLACE "." "_" target_name ${target_name})
 
-    add_executable(${target_name} ${src})
-endforeach()
+    add_executable(${target_name} ${src}
+            src/core_linkedlist/mylist.c
+            src/core_linkedlist/list.h
+            src/LinkedList/DeleteNodesOfValue.c
+            src/LinkedList/ReverseLinkdeList.c)
+endforeach ()
 
 # ============================================================
 # 栈模块: stack_demo.c 调用 stack.c / stack.h 中定义的栈操作,
 # 需把两个源文件合并编译为一个目标 stack_app
 # ============================================================
 add_executable(stack_app
-    src/stack/stack_demo.c
-    src/stack/stack.c
+        src/stack/stack_demo.c
+        src/stack/stack.c
 )
 target_include_directories(stack_app PRIVATE src/stack)

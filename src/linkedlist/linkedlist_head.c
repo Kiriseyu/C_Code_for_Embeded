@@ -99,4 +99,17 @@ int llist_delete(struct llist_node *handler, const void *find_data) {
 
 //取出节点
 int llist_fetch(struct llist_node *handler, const void *find_data, void *save) {
+    struct llist_ndoe *back = handler; //back指向要拿出节点的前一个节点
+    struct llist_node *cur = NULL; //cur指向要拿出的节点
+    cur = find(handler, find_data);
+    if (cur == NULL) {
+        return -1;
+    }
+    while (back->next != cur) {
+        back = back->next;
+    }
+    back->next = cur->next;
+    memcpy(save, cur, sizeof(struct llist_node));
+    free(cur);
+    return 0;
 }

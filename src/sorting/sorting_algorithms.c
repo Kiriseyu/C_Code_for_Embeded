@@ -1,19 +1,18 @@
 ﻿#include<stdio.h>
-#include <string.h>
 
 void bubbleSort(int *p, int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+            if (p[j] > p[j + 1]) {
+                int temp = p[j];
+                p[j] = p[j + 1];
+                p[j + 1] = temp;
             }
         }
     }
 }
 
-int selectionSort(int *p, int size) {
+void selectionSort(int *p, int size) {
     for (int i = 0; i < size - 1; i++) {
         int min = i;
         for (int j = i + 1; j < size; j++) {
@@ -25,12 +24,12 @@ int selectionSort(int *p, int size) {
             int temp = p[i];
             p[i] = p[min];
             p[min] = temp;
-            print(p, size);
+            printf(p, size);
         }
     }
 }
 
-int insertionSort(int *p, int size) {
+void insertionSort(int *p, int size) {
     for (int i = 1; i < size; i++) {
         int k = p[i]; //待插入元素
         int l = i - 1; //已排序的最后一个元素
@@ -50,10 +49,13 @@ int main(void) {
     switch (n) {
         case 1:
             bubbleSort(arr, size);
+            break;
         case 2:
             insertionSort(arr, size);
+            break;
         case 3:
             selectionSort(arr, size);
+            break;
     }
     for (int i = 0; i < size; i++) {
         printf("%d ", arr[i]);
